@@ -2,7 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="ch.elexis.Text">
+         point="ch.elexis.core.ui.Text">
       <Texterweiterung
             Klasse="com.jsigle.noa.NOAText"
             name="NOAText_jsl"/>
@@ -14,5 +14,5 @@
             id="ag.ion.bion.noatext_jsl"
             name="NOAText_jsl · Version 1.4.12 · 2013-05-27 · Aktualisiertes und verbessertes NOAText · joerg.sigle@jsigle.com · www.jsigle.com"/>
    </extension>
-
+ 
 </plugin>
