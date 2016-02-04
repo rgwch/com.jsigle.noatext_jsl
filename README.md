@@ -1,5 +1,7 @@
 Dieser Fork ist eine Portierung des Plugins auf Elexis 3.1, da OpenSource Elexis kein funktionierendes Textplugin mehr hat.
 Keine externen Abhängigkeiten.
+
+gweirich, 4.2.2016
 ___________________
 
 NOAText_jsl
