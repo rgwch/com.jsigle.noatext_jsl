@@ -58,44 +58,27 @@
  */
 package ag.ion.noa4e.ui.operations;
 
-import ag.ion.bion.officelayer.application.IOfficeApplication;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+
+import com.sun.star.beans.XPropertySet; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
+import com.sun.star.frame.XFrame; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
+import com.sun.star.frame.XLayoutManager; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
+import com.sun.star.uno.UnoRuntime; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
+
+import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.desktop.GlobalCommands; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
 import ag.ion.bion.officelayer.desktop.IFrame;
-
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.noa.frame.ILayoutManager; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-
 import ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage; //20130310js: To support control of js threaded watchdog from NOAText_jsl preferences dialog.
-
-import ch.elexis.Desk;
-import ch.elexis.Hub;
-import ch.elexis.util.SWTHelper;
-import ch.elexis.preferences.PreferenceConstants; 		 //20130310js: To support control of js threaded watchdog from NOAText_jsl preferences dialog.
-import ch.elexis.preferences.SettingsPreferenceStore;	 //20130310js: To support control of js threaded watchdog from NOAText_jsl preferences dialog.
-
-import com.sun.star.frame.XLayoutManager; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-import com.sun.star.frame.XFrame; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-import com.sun.star.uno.UnoRuntime; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-import com.sun.star.beans.XPropertySet; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-import com.sun.star.ui.UIElementType; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-import com.sun.star.frame.FrameSearchFlag; //20120222js: To support disabling menus items and open dialogs which would cause the Elexis/OO to hang
-
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.widgets.Shell;
-
-import java.io.InputStream;
-
-import java.lang.reflect.InvocationTargetException;
-
-import java.net.URL;
 
 /**
  * Operation in order to load a OpenOffice.org document.

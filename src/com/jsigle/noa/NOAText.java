@@ -94,16 +94,7 @@
  ****************************************************************************/
 package com.jsigle.noa;
 
-import com.jsigle.noa.OOPrinter.MyXPrintJobListener;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.bridge.UnoUrlResolver;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.UnoRuntime;
-
-import java.awt.Frame;
+import java.awt.print.PageFormat;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -118,17 +109,40 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
-import org.jdom.Document;
 import org.osgi.framework.Bundle;
+
+import com.jsigle.noa.OOPrinter.MyXPrintJobListener;
+import com.sun.star.awt.FontWeight;
+import com.sun.star.awt.Size;
+import com.sun.star.awt.XTextComponent;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.drawing.XShape;
+import com.sun.star.form.FormComponentType;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.style.ParagraphAdjust;
+import com.sun.star.text.HoriOrientation;
+import com.sun.star.text.RelOrientation;
+import com.sun.star.text.TextContentAnchorType;
+import com.sun.star.text.VertOrientation;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextFrame;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.view.PrintableState;
+import com.sun.star.view.XPrintable;
 
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.desktop.IDesktopService;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.event.ICloseEvent;
@@ -136,7 +150,6 @@ import ag.ion.bion.officelayer.event.ICloseListener;
 import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.form.IFormComponent;
 import ag.ion.bion.officelayer.form.IFormService;
-import ag.ion.bion.officelayer.internal.application.connection.LocalOfficeConnectionGhost;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextRange;
 import ag.ion.bion.officelayer.text.ITextTable;
@@ -145,80 +158,21 @@ import ag.ion.bion.workbench.office.editor.core.EditorCorePlugin;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
-import ag.ion.noa.service.IServiceProvider;
 import ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage;
 import ag.ion.noa4e.ui.widgets.OfficePanel;
-import ch.elexis.Desk;
-import ch.elexis.Hub;
-import com.jsigle.noa.NOAText;
-import com.jsigle.noa.OOPrinter;
-
-//import com.jsigle.noa.closeListener;	//201206260013js
-import ch.elexis.actions.ElexisEventDispatcher;
-import ch.elexis.data.Brief;
-import ch.elexis.data.Fall;
-//import ch.elexis.data.Konsultation;	//20130414js: use temporary meaningful filenames - TODO - Remove if not needed any more. Look for configured_temp_filename below.
-import ch.elexis.data.Kontakt;
+import ch.elexis.core.data.activator.CoreHub;
+import ch.elexis.core.data.events.ElexisEventDispatcher;
+import ch.elexis.core.data.interfaces.text.ReplaceCallback;
+import ch.elexis.core.ui.text.ITextPlugin;
+import ch.elexis.core.ui.util.SWTHelper;
 import ch.elexis.data.Patient;
-import ch.elexis.dialogs.DocumentSelectDialog;
-import ch.elexis.preferences.PreferenceConstants;
-import ch.elexis.text.ITextPlugin;
-import ch.elexis.text.ReplaceCallback;
-import ch.elexis.util.Log;
-import ch.elexis.util.SWTHelper;
 //import ch.elexis.util.viewers.CommonViewer; //20130414js: use temporary meaningful filenames -  TODO - MaybeNeeded later on. Look for configured_temp_filename below.
-import ch.elexis.views.Messages;
-import ch.elexis.views.TextView;
 //import ch.elexis.views.BriefAuswahl; //20130414js: use temporary meaningful filenames -  TODO - MaybeNeeded later on. Look for configured_temp_filename below.
 import ch.rgw.io.FileTool;
 import ch.rgw.tools.ExHandler;
+import ch.rgw.tools.Log;
 import ch.rgw.tools.StringTool;
 import ch.rgw.tools.TimeTool;
-
-import com.sun.star.awt.FontWeight;
-import com.sun.star.awt.Size;
-import com.sun.star.awt.XGraphics;
-import com.sun.star.awt.XTextComponent;
-import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
-import com.sun.star.bridge.UnoUrlResolver;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.drawing.XShape;
-import com.sun.star.form.FormComponentType;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.graphic.XGraphic;
-import com.sun.star.graphic.XGraphicProvider;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.style.ParagraphAdjust;
-import com.sun.star.text.HoriOrientation;
-import com.sun.star.text.RelOrientation;
-import com.sun.star.text.TextContentAnchorType;
-import com.sun.star.text.VertOrientation;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextFieldsSupplier;
-import com.sun.star.text.XTextFrame;
-import com.sun.star.text.XTextGraphicObjectsSupplier;
-import com.sun.star.ucb.XFileIdentifierConverter;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.util.XRefreshable;
-import com.sun.star.view.PrintableState;
-import com.sun.star.view.XPrintable;
 
 public class NOAText implements ITextPlugin {
 	public static final String MIMETYPE_OO2 = "application/vnd.oasis.opendocument.text";
@@ -236,16 +190,16 @@ public class NOAText implements ITextPlugin {
 	public NOAText(){
 		System.out.println("NOAText: NOAText: noa loaded");
 		System.out.println("NOAText: NOAText: computing defaultbase...");
-		File base = new File(Hub.getBasePath());
+		File base = new File(CoreHub.getBasePath());
 		File fDef = new File(base.getParentFile().getParent() + "/ooo");
-		System.out.println("NOAText: NOAText: Hub.getBasePath():"+Hub.getBasePath());
+		System.out.println("NOAText: NOAText: Hub.getBasePath():"+CoreHub.getBasePath());
 		System.out.println("NOAText: NOAText: base.getParentFile().getParent() + \"/ooo\":"+base.getParentFile().getParent() + "/ooo");
 		String defaultbase;
 		if (fDef.exists()) {
 			defaultbase = fDef.getAbsolutePath();
-			Hub.localCfg.set(PreferenceConstants.P_OOBASEDIR, defaultbase);
+			CoreHub.localCfg.set(PreferenceConstants.P_OOBASEDIR, defaultbase);
 		} else {
-			defaultbase = Hub.localCfg.get(PreferenceConstants.P_OOBASEDIR, ".");
+			defaultbase = CoreHub.localCfg.get(PreferenceConstants.P_OOBASEDIR, ".");
 		}
 		System.out.println("NOAText: NOAText: computed defaultbase=openoffice.path.name:"+defaultbase);
 		System.setProperty("openoffice.path.name", defaultbase);
@@ -1470,5 +1424,17 @@ public class NOAText implements ITextPlugin {
 	public boolean isDirectOutput() {
 		System.out.println("NOAText: isDirectOutput - always returns false");
 		return false;
+	}
+
+	@Override
+	public void setParameter(Parameter parameter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initTemplatePrintSettings(String template) {
+		// TODO Auto-generated method stub
+		
 	}
 }

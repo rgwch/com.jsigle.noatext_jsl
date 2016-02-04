@@ -1,11 +1,5 @@
 package ooo.connector;
 
-import org.eclipse.jface.preference.IPreferenceStore;
-
-import ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage;
-import ch.elexis.Hub;
-import ch.elexis.preferences.SettingsPreferenceStore;
-
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
@@ -17,6 +11,8 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+
+import ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage;
 import ooo.connector.server.OOoServer;
 
 /**

@@ -16,9 +16,6 @@ package com.jsigle.noa;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
-import ch.elexis.util.Log;
-import ch.rgw.tools.ExHandler;
-
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.container.XNameAccess;
@@ -35,6 +32,9 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.view.PrintJobEvent;
 import com.sun.star.view.PrintableState;
 import com.sun.star.view.XPrintJobListener;
+
+import ch.elexis.core.ui.util.Log;
+import ch.rgw.tools.ExHandler;
 
 /**
  * Some helpers for printing

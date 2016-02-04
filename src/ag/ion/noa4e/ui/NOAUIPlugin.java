@@ -85,19 +85,18 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import ch.elexis.Hub;
-import ch.elexis.preferences.PreferenceConstants;
-import ch.elexis.preferences.SettingsPreferenceStore;
-
-import ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage;
+import com.jsigle.noa.PreferenceConstants;
 
 import ag.ion.bion.officelayer.application.ILazyApplicationInfo;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage;
+import ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage;
 import ag.ion.noa4e.ui.operations.ActivateOfficeApplicationOperation;
 import ag.ion.noa4e.ui.operations.FindApplicationInfosOperation;
 import ag.ion.noa4e.ui.wizards.application.LocalApplicationWizard;
+import ch.elexis.core.data.activator.CoreHub;
+import ch.elexis.core.ui.preferences.SettingsPreferenceStore;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -309,7 +308,7 @@ public class NOAUIPlugin extends AbstractUIPlugin {
     	//Unsuitable original line, removed:
     	//String officeHome = getDefault().getPreferenceStore().getString(PREFERENCE_OFFICE_HOME);
     	//Newly inserted lines:
-    	IPreferenceStore preferenceStore = new SettingsPreferenceStore(Hub.localCfg);
+    	IPreferenceStore preferenceStore = new SettingsPreferenceStore(CoreHub.localCfg);
     	String officeHome = preferenceStore.getString(PreferenceConstants.P_OOBASEDIR);
     	
     	if (officeHome==null)	System.out.println("NOAUIPlugin: startLocalOfficeApplication(2): WARNING: officeHome==null");
@@ -406,7 +405,7 @@ public class NOAUIPlugin extends AbstractUIPlugin {
     //Unsuitable original line, removed:
     //String officeHome = getDefault().getPreferenceStore().getString(PREFERENCE_OFFICE_HOME);
     //Newly inserted lines:
-    IPreferenceStore preferenceStore = new SettingsPreferenceStore(Hub.localCfg);
+    IPreferenceStore preferenceStore = new SettingsPreferenceStore(CoreHub.localCfg);
     String officeHome = preferenceStore.getString(PreferenceConstants.P_OOBASEDIR);
    
     if (officeHome==null)	System.out.println("NOAUIPlugin: internalStartApplication(): WARNING: officeHome==null");

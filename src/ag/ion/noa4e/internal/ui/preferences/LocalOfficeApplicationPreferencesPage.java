@@ -65,7 +65,6 @@ import java.util.TreeSet;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.window.Window;
@@ -90,19 +89,19 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import ch.elexis.Hub;
-import ch.elexis.preferences.PreferenceConstants;
-import ch.elexis.preferences.SettingsPreferenceStore;
-
-import ag.ion.bion.workbench.office.editor.core.EditorCorePlugin;
+import com.jsigle.noa.PreferenceConstants;
 
 import ag.ion.bion.officelayer.application.IApplicationAssistant;
 import ag.ion.bion.officelayer.application.IApplicationProperties;
 import ag.ion.bion.officelayer.application.ILazyApplicationInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
 import ag.ion.bion.workbench.office.editor.core.EditorCorePlugin;
+import ag.ion.bion.workbench.office.editor.core.EditorCorePlugin;
 import ag.ion.noa4e.ui.NOAUIPlugin;
 import ag.ion.noa4e.ui.wizards.application.LocalApplicationWizard;
+import ch.elexis.core.data.activator.CoreHub;
+import ch.elexis.core.ui.Hub;
+import ch.elexis.core.ui.preferences.SettingsPreferenceStore;
 
 /**
  * Preferences page for local OpenOffice.org application - adopted for Elexis and NOAText_jsl.
@@ -538,7 +537,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
 	System.out.println("LocalOfficeApplicationPreferencesPage: performOk(): Transferring settings from configuration dialog into internal storage...");
 	
 	
-	IPreferenceStore preferenceStore = new SettingsPreferenceStore(Hub.localCfg);
+	IPreferenceStore preferenceStore = new SettingsPreferenceStore(CoreHub.localCfg);
     preferenceStore.setValue(PREFS_PREVENT_TERMINATION, buttonPreventTermination.getSelection());
 
 
@@ -716,7 +715,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
 	
     System.out.println("LocalOfficeApplicationPreferencesPage: initPreferenceValues(): initializing dialog fields from internal storage or default values");
 
-    IPreferenceStore preferenceStore=new SettingsPreferenceStore(Hub.localCfg);
+    IPreferenceStore preferenceStore=new SettingsPreferenceStore(CoreHub.localCfg);
 	String officeHomePath=preferenceStore.getString(PreferenceConstants.P_OOBASEDIR);
 	boolean preventTermination=preferenceStore.getBoolean(PREFS_PREVENT_TERMINATION);
 
@@ -780,7 +779,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
    * @author Joerg Sigle
    */
   public static Integer getTimeoutBootstrapConnect() {
-	IPreferenceStore preferenceStore=new SettingsPreferenceStore(Hub.localCfg);
+	IPreferenceStore preferenceStore=new SettingsPreferenceStore(CoreHub.localCfg);
 	return getTimeoutBootstrapConnect(preferenceStore);
   }	
   
@@ -811,7 +810,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
    * @author Joerg Sigle
    */
   public static Integer getTimeoutThreadedWatchdog() {
-	IPreferenceStore preferenceStore=new SettingsPreferenceStore(Hub.localCfg);
+	IPreferenceStore preferenceStore=new SettingsPreferenceStore(CoreHub.localCfg);
 	return getTimeoutThreadedWatchdog(preferenceStore);
   }	
   
@@ -842,7 +841,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
    * @author Joerg Sigle
    */
   public static String getCotfOption(int i,int j) {
-	IPreferenceStore preferenceStore=new SettingsPreferenceStore(Hub.localCfg);
+	IPreferenceStore preferenceStore=new SettingsPreferenceStore(CoreHub.localCfg);
 	return getCotfOption(preferenceStore,i,j);
   }	
   
@@ -920,7 +919,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
   //FIXME: The same code (with slightly different names) is contained in Omnivore_js.PreferencePage.java; from where this was adopted. Maybe it should be refactored to one common js toolkit unit?. 
   
   public static String getNOAText_jslTemp_Filename_Element(String element_key,String element_data) {
-	IPreferenceStore preferenceStore=new SettingsPreferenceStore(Hub.localCfg);
+	IPreferenceStore preferenceStore=new SettingsPreferenceStore(CoreHub.localCfg);
 	return getNOAText_jslTemp_Filename_Element(preferenceStore, element_key, element_data);
   }	
   
